@@ -52,8 +52,8 @@ const Emoji = ({ rating }: Props) => {
   }
   return (
     <Text paddingY={2}>
-      {arr.map((item) => (
-        <Icon as={FaStar} />
+      {arr.map((item, index) => (
+        <Icon as={FaStar} key={index} />
       ))}
     </Text>
   );
