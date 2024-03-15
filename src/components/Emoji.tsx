@@ -2,7 +2,6 @@ import { Icon, Image, ImageProps, Text } from "@chakra-ui/react";
 import { IconType } from "react-icons";
 import { FaMeh, FaStar } from "react-icons/fa";
 import { FaThumbsUp } from "react-icons/fa";
-import { GoGoal } from "react-icons/go";
 
 interface Props {
   rating: number;
