@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { GameQuery } from "../App";
 // import useData, { FetchResponse } from "./useData";
 import { Genre } from "./useGenres";
@@ -37,8 +37,33 @@ export interface Game {
 //     [gameQuery]
 //   );
 
+// const useGames = (gameQuery: GameQuery) =>
+//   useQuery<FetchResponse<Game>, Error>({
+//     queryKey: ["games", gameQuery],
+//     // queryFn: () =>
+//     //   apiClient
+//     //     .get<FetchResponse<Game>>("/games", {
+//     //       params: {
+//     //         genres: gameQuery.genre?.id,
+//     //         parent_platforms: gameQuery.platform?.id,
+//     //         ordering: gameQuery.sortOrder,
+//     //         search: gameQuery.searchText,
+//     //       },
+//     //     })
+//     //     .then((res) => res.data),
+//     queryFn: () =>
+//       apiClient.getAll({
+//         params: {
+//           genres: gameQuery.genre?.id,
+//           parent_platforms: gameQuery.platform?.id,
+//           ordering: gameQuery.sortOrder,
+//           search: gameQuery.searchText,
+//         },
+//       }),
+//   });
+
 const useGames = (gameQuery: GameQuery) =>
-  useQuery<FetchResponse<Game>, Error>({
+  useInfiniteQuery<FetchResponse<Game>, Error>({
     queryKey: ["games", gameQuery],
     // queryFn: () =>
     //   apiClient
@@ -51,15 +76,19 @@ const useGames = (gameQuery: GameQuery) =>
     //       },
     //     })
     //     .then((res) => res.data),
-    queryFn: () =>
+    queryFn: ({ pageParam = 1 }) =>
       apiClient.getAll({
         params: {
           genres: gameQuery.genre?.id,
           parent_platforms: gameQuery.platform?.id,
           ordering: gameQuery.sortOrder,
           search: gameQuery.searchText,
+          page: pageParam,
         },
       }),
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.next ? allPages.length + 1 : undefined;
+    },
   });
 
 export default useGames;
